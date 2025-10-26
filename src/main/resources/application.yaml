@@ -1,0 +1,9 @@
+spring.application.name: ShareApi
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database: postgresql
+    show-sql: false
+  liquibase:
+    change-log: classpath:/db/changelog/**.xml
