@@ -14,8 +14,10 @@ public class ListItem
     @Column(name = "item_id")
     protected long id;
 
+    @Column
     private String link;
 
+    @Column
     private String description;
 
     @ManyToOne

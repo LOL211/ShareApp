@@ -37,13 +37,11 @@ dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
         implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
         implementation 'org.springframework.boot:spring-boot-starter-cache'
+        implementation 'org.springframework.boot:spring-boot-starter-security'
+        implementation("org.springframework.security:spring-security-oauth2-jose")
 
         // Feign client support
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
-
-        // Jackson 3.x (JSON + optional XML)
-        implementation 'tools.jackson.core:jackson-databind:3.0.1'
-        implementation 'tools.jackson.dataformat:jackson-dataformat-xml:3.0.1'
 
         // Caffeine cache
         implementation 'com.github.ben-manes.caffeine:caffeine:3.2.3'
@@ -68,6 +66,10 @@ dependencies {
         // Testing
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+        //Validation
+        implementation 'jakarta.validation:jakarta.validation-api:4.0.0-M1'
+        implementation 'org.hibernate.validator:hibernate-validator:9.0.1.Final'
     }
 
 }

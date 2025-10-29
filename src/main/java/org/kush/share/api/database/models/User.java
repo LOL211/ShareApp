@@ -1,6 +1,7 @@
 package org.kush.share.api.database.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Entity
@@ -13,8 +14,12 @@ public class User
     @Column(name = "user_id")
     private long id;
 
+    @Column(unique = true)
+    @NotBlank
     private String username;
 
+    @Column(unique = true)
+    @NotBlank
     private String email;
 
 }
