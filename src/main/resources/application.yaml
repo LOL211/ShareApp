@@ -7,3 +7,14 @@ spring:
     show-sql: false
   liquibase:
     change-log: classpath:/db/changelog/**.xml
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+vaulty:
+  auth.url: http://localhost:8080
+  client.id: ${CLIENT_ID}
+
+server:
+  port: 8443
