@@ -1,23 +1,17 @@
 meta {
-  name: CreateUser
+  name: Get Lists
   type: http
   seq: 1
 }
 
-post {
-  url: http://localhost:8443/api/user
+get {
+  url: http://localhost:8443/api/list
   body: json
   auth: bearer
 }
 
 auth:bearer {
   token: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJWYXVsdHlBdXRoIiwic3ViIjoia2JhbmJhaEB5YWhvby5jb20iLCJleHAiOjE3NjE3NTY2NTIsImlhdCI6MTc2MTc1NjA1Miwic2NvcGUiOiJwdWJsaWM7YXBpLnNoYXJlLmFwcCJ9.GyDkPIl-6d1VssijsOhi8evBDeIDkBo9UblpgJ5fhAde05miI00q0z6XAo5uDyUzhQleJMTCsVq9WwJQgrk4ATuXOTZtbZ3i1_j7-kDOhelHsMzd6soZ6RwkSAc9WMhUD4sRsliZ-Av6dTWYsCO5ACeNnqjcGNmRr5iUXYlzOYGX6FIGCxYMnCl30FvHGRjZaokkw_8mljUju6YR7nRUuB-RLDGzPc3mnK3HcMYEoNov4ynZSIu1dTjBlT1tBYqen1dVIjZUtAnZC5BL24Pr_jEBYpMn44nmq51rt0LygJ5N6Gv-rH3vF_fv2hhLkDXYMVnVG3LS6KNJob6s3a7BpQ
-}
-
-body:json {
-  {
-    "username": "kush"
-  }
 }
 
 settings {

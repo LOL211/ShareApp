@@ -25,6 +25,6 @@ public class UserList
     @Column(name = "list_name")
     private String listName;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userList")
     private List<ListItem> items;
 }

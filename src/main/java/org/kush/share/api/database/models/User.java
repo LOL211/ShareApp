@@ -16,10 +16,6 @@ public class User
 
     @Column(unique = true)
     @NotBlank
-    private String username;
-
-    @Column(unique = true)
-    @NotBlank
     private String email;
 
 }

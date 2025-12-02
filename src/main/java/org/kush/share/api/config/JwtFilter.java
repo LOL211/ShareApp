@@ -35,6 +35,7 @@ public class JwtFilter extends OncePerRequestFilter {
             JwtDecoder publicKey = authService.getJwtDecoder();
             Jwt token = publicKey.decode(bearerToken);
             assert token != null;
+
             if (Instant.now().isAfter(token.getExpiresAt()))
             {
                 throw new Exception("Token is expired");
@@ -48,15 +49,18 @@ public class JwtFilter extends OncePerRequestFilter {
                     .anyMatch(authority -> authority.equals(scope))
             );
 
+            if (!jwtToken.isAuthenticated())
+            {
+                throw new Exception("Incorrect scopes!");
+            }
+
             SecurityContextHolder.getContext().setAuthentication(jwtToken);
+            filterChain.doFilter(request, response);
         }
         catch (Exception e){
             log.error("Jwt token authentication failed", e);
             SecurityContextHolder.clearContext();
-        }
-        finally
-        {
-            filterChain.doFilter(request, response);
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
     }
 }

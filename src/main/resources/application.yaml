@@ -15,6 +15,7 @@ spring:
 vaulty:
   auth.url: http://localhost:8080
   client.id: ${CLIENT_ID}
+  scopes: api.share.app
 
 server:
-  port: 8443
+  port: 8081

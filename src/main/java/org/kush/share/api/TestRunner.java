@@ -24,8 +24,7 @@ public class TestRunner implements CommandLineRunner
     public void run(String... args) throws Exception
     {
         User u = new User();
-        u.setUsername("admin");
-        u.setEmail("test");
+        u.setEmail("fakeEmail@yahoo.com");
 
         u = userRepository.save(u);
         UserList userList = new UserList();
