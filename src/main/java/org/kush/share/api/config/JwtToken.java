@@ -10,15 +10,18 @@ import java.util.stream.Collectors;
 public class JwtToken extends AbstractAuthenticationToken
 {
     private final String subject;
+    private final String token;
 
-    public JwtToken(String scopes, String subject) {
+    public JwtToken(String scopes, String subject, String token) {
         super(Arrays.stream(scopes.split(";")).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
         this.subject = subject;
+        this.token = token;
+
     }
 
     @Override
     public Object getCredentials() {
-        return null;
+        return token;
     }
 
     @Override

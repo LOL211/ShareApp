@@ -5,6 +5,7 @@ import lombok.Data;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "user_list")
@@ -14,13 +15,15 @@ public class UserList
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "list_id")
-    protected long id;
+    protected UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User createdBy;
+    @Column(name = "created_by")
+    private UUID createdBy;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<User> sharedWith;
+    @ElementCollection
+    @CollectionTable(name = "list_shared_with", joinColumns = @JoinColumn(name = "list_id"))
+    @Column(name = "shared_with_user")
+    private Set<UUID> sharedWith;
 
     @Column(name = "list_name")
     private String listName;

@@ -23,8 +23,9 @@ public class Config {
 
     @Bean
     CaffeineCacheManager caffeineCacheManager() {
-        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager("jwt-decoder");
-        caffeineCacheManager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(1)));
+        CaffeineCacheManager caffeineCacheManager = new CaffeineCacheManager();
+        caffeineCacheManager.registerCustomCache("jwt-decoder", Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(1)).build());
+        caffeineCacheManager.registerCustomCache("user-cache", Caffeine.newBuilder().expireAfterWrite(Duration.ofDays(7)).build());
         return caffeineCacheManager;
     }
 

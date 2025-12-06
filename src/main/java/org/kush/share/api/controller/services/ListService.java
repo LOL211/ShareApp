@@ -1,36 +1,38 @@
 package org.kush.share.api.controller.services;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.kush.share.api.controller.dtos.ListItemDto;
 import org.kush.share.api.controller.dtos.UserListDto;
-import org.kush.share.api.database.models.User;
 import org.kush.share.api.database.models.UserList;
 import org.kush.share.api.database.repository.ListRepository;
-import org.kush.share.api.database.repository.UserRepository;
+import org.kush.share.api.service.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class ListService
 {
     private final ListRepository listRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public List<UserListDto> getList(String userEmail)
+    public List<UserListDto> getList(String uuid)
     {
-        User u =  userRepository.findByEmail(userEmail)
-                .orElse(null);
+        String username = userService.getUsernameForUuid(UUID.fromString(uuid));
 
-        if (u == null)
+        if (StringUtils.isEmpty(username))
+        {
             return Collections.emptyList();
+        }
 
-        List<UserList> lists = listRepository.findAllListsOfAUserWithItems(u);
+        List<UserList> lists = listRepository.findAllListsOfAUserWithItems(UUID.fromString(uuid));
 
         return lists.stream().map(list ->
-            new UserListDto(list.getListName(), list.getCreatedBy().getEmail(),
+            new UserListDto(list.getListName(),  userService.getUsernameForUuid(list.getCreatedBy()),
                     list.getItems().stream().map(x -> new ListItemDto(x.getLink(), x.getDescription())).toList()
             )
         ).toList();
