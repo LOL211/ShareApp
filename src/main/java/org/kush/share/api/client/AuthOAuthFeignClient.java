@@ -9,14 +9,10 @@ import java.util.Map;
 import java.util.UUID;
 
 @FeignClient(
-        name = "Auth",
-        configuration = AuthFeignClientConfig.class,
+        name = "auth-client",
         url = "${vaulty.auth.url}"
 )
-public interface AuthFeignClient {
-
-    @RequestMapping(method = RequestMethod.GET, value = "/api/public")
-    String getPublicKey();
+public interface AuthOAuthFeignClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/api/user")
     Map<UUID, String> getUsersInfo(List<UUID> ids);

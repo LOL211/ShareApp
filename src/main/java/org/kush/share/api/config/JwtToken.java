@@ -4,7 +4,7 @@ import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.security.auth.Subject;
-import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class JwtToken extends AbstractAuthenticationToken
@@ -12,8 +12,8 @@ public class JwtToken extends AbstractAuthenticationToken
     private final String subject;
     private final String token;
 
-    public JwtToken(String scopes, String subject, String token) {
-        super(Arrays.stream(scopes.split(";")).map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
+    public JwtToken(List<String> scopes, String subject, String token) {
+        super(scopes.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toSet()));
         this.subject = subject;
         this.token = token;
 

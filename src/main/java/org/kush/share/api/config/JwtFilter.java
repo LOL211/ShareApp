@@ -40,7 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
             {
                 throw new Exception("Token is expired");
             }
-            JwtToken jwtToken = new JwtToken(token.getClaimAsString("scope"), token.getSubject(), token.getTokenValue());
+            JwtToken jwtToken = new JwtToken(token.getClaimAsStringList("scope"), token.getSubject(), token.getTokenValue());
 
             jwtToken.setAuthenticated(
                     jwtToken.getAuthorities()

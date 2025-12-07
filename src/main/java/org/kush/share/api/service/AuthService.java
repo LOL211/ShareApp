@@ -2,7 +2,7 @@ package org.kush.share.api.service;
 
 import lombok.RequiredArgsConstructor;
 import org.bouncycastle.util.encoders.Base64;
-import org.kush.share.api.client.AuthFeignClient;
+import org.kush.share.api.client.AuthClientFeignClient;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -17,11 +17,11 @@ import java.security.spec.X509EncodedKeySpec;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private final AuthFeignClient authFeignClient;
+    private final AuthClientFeignClient authClientFeignClient;
 
     @Cacheable(cacheNames = "jwt-decoder")
     public JwtDecoder getJwtDecoder() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        String publicKey = authFeignClient.getPublicKey();
+        String publicKey = authClientFeignClient.getPublicKey();
         byte[] rawKey = Base64.decode(publicKey);
 
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
