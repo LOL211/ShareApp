@@ -35,6 +35,12 @@ public class TestRunner implements CommandLineRunner
         listItem.setDescription("this is a test");
         listItem = itemsRepository.save(listItem);
 
+        listItem = new ListItem();
+        listItem.setUserList(userList);
+        listItem.setLink("https://www.google.com");
+        listItem.setDescription("this is a test2");
+        listItem = itemsRepository.save(listItem);
+
         userList = new UserList();
         userList.setCreatedBy(userId);
         userList.setListName("my 2nd list");
