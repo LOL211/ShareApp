@@ -2,17 +2,21 @@ package org.kush.share.api.database.models;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ListItem
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_id")
-    protected long id;
+    protected Long id;
 
     @Column
     private String link;

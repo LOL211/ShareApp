@@ -22,7 +22,7 @@ public class TestRunner implements CommandLineRunner
     @Override
     public void run(String... args)
     {
-        UUID userId = UUID.fromString("013c8519-f04e-46d0-9c8c-9be9a8dae3a8");
+        UUID userId = UUID.fromString("a5e8c0c9-1213-4223-8c9a-283cb9143862");
         UserList userList = new UserList();
         userList.setCreatedBy(userId);
         userList.setListName("my new list");
