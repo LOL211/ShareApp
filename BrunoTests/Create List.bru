@@ -1,0 +1,32 @@
+meta {
+  name: Create List
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://{{URL}}:8081/api/list
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJWYXVsdHlBdXRoIiwic3ViIjoiYTVlOGMwYzktMTIxMy00MjIzLThjOWEtMjgzY2I5MTQzODYyIiwiZXhwIjoxNzY3MjcyNzc5LCJpYXQiOjE3NjcyNzIxNzksInNjb3BlIjpbImFwaS5zaGFyZS5hcHAiXX0.Kb52o1YlGZxUJfbhqmcnaILu5-VZItaZIPcELVNXBp3YAxJhUh9IpmjhiPCqtSwQ1jX10gidX6_ypkyDF-YlCAE_Od2secE_bbAXRGvwTlGhipnDqdWpvPDuKW19z9iVKulnOPoXeb0kxFX2pOuAcSoJszlxc3L9bau6yrUucsprrZf_i3C0mNn0wIB1M3d-J3hRaN730Rb6m3j_I3avmOCftI9NPoEG0ksdQTPj3gnqFd0CxFaKTuocC61TD3LjPUrH2l_jkGAsP4G7sWZ5-zpeyq4hRYmc0C9IEk4j1D8J0ICHj75XGwreAsYS-KFj8WhIeSejjQiyuaxVnFCsHg
+}
+
+body:json {
+  {
+      "listName": "my new list3!",
+      "listItems": [
+        {
+          "link": "https://www.google.com",
+          "description": "this is a test"
+        }
+      ]
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
