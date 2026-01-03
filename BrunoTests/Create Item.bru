@@ -1,0 +1,27 @@
+meta {
+  name: Create Item
+  type: http
+  seq: 4
+}
+
+post {
+  url: http://{{URL}}:8081/api/list/mylist
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJWYXVsdHlBdXRoIiwic3ViIjoiYTVlOGMwYzktMTIxMy00MjIzLThjOWEtMjgzY2I5MTQzODYyIiwiZXhwIjoxNzY3NDEyODMyLCJpYXQiOjE3Njc0MTIyMzIsInNjb3BlIjpbImFwaS5zaGFyZS5hcHAiXX0.lxXgkIbxg5VWrITguoapR77Q4R3vwbxybH473U21yPP3ZpdJZmKoMWD08pkU6uSxz2ly-4r4Bmod14eLTO3v7Osu0RHuaVw-_rsh811grYOOywbXy7xOX5L7pLRd4Og02aCanms90dfJXhSLFndWmwX_aQA6g4BQJ69boimp_4msHHPlzF9g9NJRcgRDc2IhwINUp-rYWphOJhuW_UnuEX2y0sY2PUcSlYpbDG7dFX-tYgGCgaCUPcMeo0XyarTGVBhXC19-wRNAwAV9zI4XW6afZtf1o6bNC1ln5hg5_PwCB1dUcrcWoa0OYrlFZgYD-5qP3WKEqMpawH51DuZErg
+}
+
+body:json {
+  {
+      "link": "https://www.google.com",
+      "description": "this is a test"   
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

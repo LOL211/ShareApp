@@ -37,7 +37,7 @@ public class ListService
         return lists.stream().map(this::convertUserListToDto).toList();
     }
 
-    public String createUserList(String userId, UserListDto userListDto) throws Exception {
+    public String createUserList(String userId, UserListDto userListDto) {
         List<UserList> lists = listRepository.findAllListsOfAUserWithItems(UUID.fromString(userId));
 
         if (lists.stream().map(list -> list.getListName().toLowerCase())
@@ -56,6 +56,21 @@ public class ListService
                 .map(listItemDto -> new ListItem(null, listItemDto.link(), listItemDto.description(), userList)).toList());
 
         return userList.getListName();
+    }
+
+    public String createListItem(String userId, String listName, ListItemDto listItemDto) {
+        List<UserList> lists = listRepository.findAllListsOfAUserWithItems(UUID.fromString(userId));
+
+        UserList list = lists.stream().filter(userList -> userList.getListName()
+                .equalsIgnoreCase(listName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("List not found!"));
+
+        ListItem listItem = new ListItem(null, listItemDto.link(), listItemDto.description(), list);
+
+        itemsRepository.save(listItem);
+
+        return listItem.getDescription();
     }
 
     private UserListDto convertUserListToDto(UserList userList)
