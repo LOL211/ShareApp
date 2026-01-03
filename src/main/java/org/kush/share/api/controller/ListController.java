@@ -24,6 +24,12 @@ public class ListController
         return ResponseEntity.ok(listService.getList((String) authentication.getPrincipal()));
     }
 
+    @GetMapping("{listName}")
+    public ResponseEntity<UserListDto> getUserList(Authentication authentication, @PathVariable("listName") String listName)
+    {
+        return ResponseEntity.ok(listService.getSingleList((String) authentication.getPrincipal(), listName));
+    }
+
     @PostMapping
     public ResponseEntity<String> createNewUserList(Authentication authentication, @RequestBody UserListDto userListDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body("Created list "+ listService.createUserList((String) authentication.getPrincipal(), userListDto));

@@ -1,0 +1,20 @@
+meta {
+  name: Get List
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://{{URL}}:8081/api/list/my new list
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJWYXVsdHlBdXRoIiwic3ViIjoiYTVlOGMwYzktMTIxMy00MjIzLThjOWEtMjgzY2I5MTQzODYyIiwiZXhwIjoxNzY3NDE3ODE3LCJpYXQiOjE3Njc0MTcyMTcsInNjb3BlIjpbImFwaS5zaGFyZS5hcHAiXX0.Tgm7Z6dxXarYGPJx98iDxLmw79ERakRmuYnvn7XeYnZ8XsNyJoFmRGvKaLWJGinyf-0NCjMgtJi3YJahzO2vtzlR5srYXFJeRAgP1kFMFAfJICl06CcOVkhPs6berAKP-_4xQYnxYDgAWPEEE4whkkB5R1GpmYUA43LefjsbdyTsskVTtuQJagyKVqtUh8n9xL6Cpu5hTtQrf9ypznI0DPyaUIfKB95ZdJd6P9FULFyhHki4vh3rgDxmi11TbMliJKlx80IBchjPOI-eSlHtbRp6OBENBHajEQVja3JudUyS0dApTzklwQEt4mN6Bho8ciobCEcYdIjMoTQ7jfnyYQ
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -37,6 +37,20 @@ public class ListService
         return lists.stream().map(this::convertUserListToDto).toList();
     }
 
+    public UserListDto getSingleList(String userId, String listName)
+    {
+        String username = userService.getUsernameForUuid(UUID.fromString(userId));
+
+        if (StringUtils.isEmpty(username))
+        {
+            return null;
+        }
+
+        UserList list = listRepository.findListOfUserWithListName(UUID.fromString(userId), listName).orElseThrow(() -> new IllegalArgumentException("list not found"));
+
+        return convertUserListToDto(list);
+    }
+
     public String createUserList(String userId, UserListDto userListDto) {
         List<UserList> lists = listRepository.findAllListsOfAUserWithItems(UUID.fromString(userId));
 
