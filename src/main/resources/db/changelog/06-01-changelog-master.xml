@@ -45,5 +45,4 @@
                                  constraintName="fk_list_shared_with_on_user_list" referencedColumnNames="list_id"
                                  referencedTableName="user_list"/>
     </changeSet>
-
 </databaseChangeLog>
