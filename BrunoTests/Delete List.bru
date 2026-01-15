@@ -1,0 +1,20 @@
+meta {
+  name: Delete List
+  type: http
+  seq: 6
+}
+
+delete {
+  url: http://{{URL}}:8081/api/list/my new list
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJWYXVsdHlBdXRoIiwic3ViIjoiYTVlOGMwYzktMTIxMy00MjIzLThjOWEtMjgzY2I5MTQzODYyIiwiZXhwIjoxNzY4NDg1OTcwLCJpYXQiOjE3Njg0ODUzNzAsInNjb3BlIjpbImFwaS5zaGFyZS5hcHAiXX0.GLNg_L0b90d4rmGplY5CnPNHRp01h26w-riJVDVBjpIUCgS6RlUBERbuipcV3BWS91o1uQS00t7p4xuuBOWzNkrKJ5Do99sjZHSnDA8Mif1PQl4m3j0X1zn55WoHU9zL8CLzNPqBMAwlkUlgGO_6mLY-dSc9_i6lzsHzxmfsRmiY_82rqQq49oY5HE1VS5r2ShWdeVj25MlnfKj5mqKNmer46sqzUiILF2bTMWqzr-dChsWQ8db5NI79hnPR3vkpJt_Eq6gu1ivVGlU6hrnkdDdWsAwopEjCQW_ucXKlMQF_oDrkXKKj-eEplhFEYsnr2IBl_shLL8xIa7_mUS57Hw
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

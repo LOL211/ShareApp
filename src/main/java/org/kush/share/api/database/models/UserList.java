@@ -28,6 +28,9 @@ public class UserList
     @Column(name = "list_name")
     private String listName;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userList")
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "userList",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<ListItem> items;
 }

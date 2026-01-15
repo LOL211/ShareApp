@@ -39,4 +39,11 @@ public class ListController
     public ResponseEntity<String> createNewListItem(Authentication authentication, @PathVariable("listName") String listName, @RequestBody ListItemDto listItemDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body("Created item with desc "+ listService.createListItem((String) authentication.getPrincipal(), listName, listItemDto));
     }
+
+    @DeleteMapping("{listName}")
+    public ResponseEntity<String> deleteListItem(Authentication authentication, @PathVariable("listName") String listName)
+    {
+        listService.deleteList((String)authentication.getPrincipal(), listName);
+        return ResponseEntity.status(HttpStatus.OK).body("List "+listName+" deleted");
+    }
 }

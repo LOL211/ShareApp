@@ -22,7 +22,7 @@ spring:
             provider: vaulty-auth
         provider:
           vaulty-auth:
-            token-uri: http://localhost:8080/api/token
+            token-uri: http://togoauth.kbanbah.com:8080/api/token
   cloud:
     openfeign:
       oauth2:
@@ -30,7 +30,7 @@ spring:
         clientRegistrationId: auth-client
 
 vaulty:
-  auth.url: http://localhost:8080
+  auth.url: http://togoauth.kbanbah.com:8080
   client.id: ${CLIENT_ID}
   scopes: api.share.app
 

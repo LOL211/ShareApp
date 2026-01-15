@@ -93,4 +93,20 @@ public class ListService
                 userList.getItems().stream().map(x -> new ListItemDto(x.getLink(), x.getDescription())).toList()
         );
     }
+
+    public void deleteList(String userId, String listName) {
+        List<UserList> lists = listRepository.findAllListsOfAUser(UUID.fromString(userId));
+
+        UserList matchedList = lists.stream().filter(list -> list.getListName().equalsIgnoreCase(listName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("list not found!"));
+
+        if (!matchedList.getCreatedBy().equals(UUID.fromString(userId)))
+        {
+            throw new IllegalArgumentException("Cannot delete a list shared by someone else!");
+        }
+
+        listRepository.delete(matchedList);
+
+    }
 }
