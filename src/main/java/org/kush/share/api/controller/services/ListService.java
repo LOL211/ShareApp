@@ -95,11 +95,7 @@ public class ListService
     }
 
     public void deleteList(String userId, String listName) {
-        List<UserList> lists = listRepository.findAllListsOfAUser(UUID.fromString(userId));
-
-        UserList matchedList = lists.stream().filter(list -> list.getListName().equalsIgnoreCase(listName))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("list not found!"));
+        UserList matchedList = getMatchedList(userId, listName);
 
         if (!matchedList.getCreatedBy().equals(UUID.fromString(userId)))
         {
@@ -107,6 +103,24 @@ public class ListService
         }
 
         listRepository.delete(matchedList);
+    }
 
+    public void deleteListItem(String userId, String listName, String listItem) {
+        UserList matchedList = getMatchedList(userId, listName);
+
+        ListItem itemToDelete = matchedList
+                .getItems().stream()
+                .filter(x -> x.getDescription().equals(listItem))
+                .findFirst().orElseThrow(() -> new IllegalArgumentException("Item "+listItem+" not found in list "+listName));
+        matchedList.getItems().remove(itemToDelete);
+        listRepository.save(matchedList);
+    }
+
+    private UserList getMatchedList(String userId, String listName) {
+        List<UserList> lists = listRepository.findAllListsOfAUser(UUID.fromString(userId));
+
+        return lists.stream().filter(list -> list.getListName().equalsIgnoreCase(listName))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("list not found!"));
     }
 }

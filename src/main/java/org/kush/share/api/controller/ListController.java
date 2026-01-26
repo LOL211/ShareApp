@@ -41,9 +41,18 @@ public class ListController
     }
 
     @DeleteMapping("{listName}")
-    public ResponseEntity<String> deleteListItem(Authentication authentication, @PathVariable("listName") String listName)
+    public ResponseEntity<String> deleteList(Authentication authentication, @PathVariable("listName") String listName)
     {
         listService.deleteList((String)authentication.getPrincipal(), listName);
         return ResponseEntity.status(HttpStatus.OK).body("List "+listName+" deleted");
+    }
+
+    @DeleteMapping("{listName}/{listItem}")
+    public ResponseEntity<String> deleteListItem(Authentication authentication,
+                                                 @PathVariable("listName") String listName,
+                                                 @PathVariable("listItem") String listItem)
+    {
+        listService.deleteListItem((String)authentication.getPrincipal(), listName, listItem);
+        return ResponseEntity.status(HttpStatus.OK).body("List "+listName+"'s item "+listItem+" deleted");
     }
 }
