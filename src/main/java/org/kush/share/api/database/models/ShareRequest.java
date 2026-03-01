@@ -23,7 +23,7 @@ public class ShareRequest
     private UUID shareId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(name ="shared_list")
+    @JoinColumn(name ="shared_list")
     private UserList sharedList;
 
     @Column(name = "request_status")

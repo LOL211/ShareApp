@@ -14,7 +14,7 @@ public class CleanupShareRequests
 {
     private final ShareRequestRepository shareRequestRepository;
 
-    @Scheduled
+    @Scheduled(cron = "0 0 0 * * *")
     private void cleanup()
     {
         //Leaving this here so later logging can be added

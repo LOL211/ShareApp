@@ -1,0 +1,20 @@
+meta {
+  name: Share List
+  type: http
+  seq: 7
+}
+
+get {
+  url: http://{{URL}}:8081/api/list/share/places to go
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJWYXVsdHlBdXRoIiwic3ViIjoiYTVlOGMwYzktMTIxMy00MjIzLThjOWEtMjgzY2I5MTQzODYyIiwiZXhwIjoxNzcyMzc2MDkyLCJpYXQiOjE3NzIzNzU0OTIsInNjb3BlIjpbImFwaS5zaGFyZS5hcHAiXX0.JSGPkaGx2Tqn-80OcYmhbVGDobku1eMNQkgnKwaNKlBN6nVfTPU6TNFpZCY3PTDipW2rCYZj7z_iH5jp30vuYRp10jBiCUlCRVdETFbRuUz2HmTN7Ckeb2WrRkfIj_ypsgbiHThZochsaL-FeCyYFqKZNebHfBCLnUNgKbd834Ygh7Yt4Z8WoNctXL5mS_ojGdIdrhQkfoGzb3xKnT7q3HbFR1s0sSPxyh7NEFBul3GuX8HeSu6L-CwhxYBTK6Sp0GPtpAM4o_IQeVcwhraN7VFSn4e8ccL7osALs96NJ98mhwTWiowFF7DufoJIwd__bt04otmr99V_XgsC6c8jCA
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
