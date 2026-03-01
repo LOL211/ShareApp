@@ -55,4 +55,11 @@ public class ListController
         listService.deleteListItem((String)authentication.getPrincipal(), listName, listItem);
         return ResponseEntity.status(HttpStatus.OK).body("List "+listName+"'s item "+listItem+" deleted");
     }
+
+    @GetMapping("share/{listName}")
+    public ResponseEntity<String> createShareLinkForList(Authentication authentication, @PathVariable("listName") String listName) throws Exception
+    {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(listService.createShareListLink((String) authentication.getPrincipal(), listName));
+    }
 }

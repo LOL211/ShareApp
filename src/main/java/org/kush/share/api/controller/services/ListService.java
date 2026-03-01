@@ -5,12 +5,17 @@ import lombok.RequiredArgsConstructor;
 import org.kush.share.api.controller.dtos.ListItemDto;
 import org.kush.share.api.controller.dtos.UserListDto;
 import org.kush.share.api.database.models.ListItem;
+import org.kush.share.api.database.models.ShareRequest;
 import org.kush.share.api.database.models.UserList;
 import org.kush.share.api.database.repository.ItemsRepository;
 import org.kush.share.api.database.repository.ListRepository;
+import org.kush.share.api.database.repository.ShareRequestRepository;
 import org.kush.share.api.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +27,7 @@ public class ListService
     private final ListRepository listRepository;
     private final UserService userService;
     private final ItemsRepository itemsRepository;
+    private final ShareRequestRepository shareRequestRepository;
 
     public List<UserListDto> getList(String userId)
     {
@@ -85,6 +91,26 @@ public class ListService
         itemsRepository.save(listItem);
 
         return listItem.getDescription();
+    }
+
+    public String createShareListLink(String userId, String listName) throws Exception
+    {
+        UserList list = listRepository.findListOfUserWithListName(UUID.fromString(userId), listName)
+                .orElseThrow(() -> new IllegalArgumentException("List not found!"));
+
+        if (!list.getCreatedBy().equals(UUID.fromString(userId)))
+        {
+            throw new Exception("List not created by you!");
+        }
+
+        ShareRequest shareRequest = ShareRequest.builder()
+                .sharedList(list)
+                .expiresAt(Instant.now().plus(1, ChronoUnit.DAYS).atZone(ZoneId.systemDefault()))
+                .build();
+
+        shareRequest = shareRequestRepository.save(shareRequest);
+
+        return shareRequest.getShareId().toString();
     }
 
     private UserListDto convertUserListToDto(UserList userList)
