@@ -33,4 +33,10 @@ public class UserList
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<ListItem> items;
+
+    @OneToMany(fetch = FetchType.LAZY,
+            mappedBy = "sharedList",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<ShareRequest> shareRequests;
 }
