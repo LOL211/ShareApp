@@ -6,12 +6,14 @@ import org.kush.share.api.controller.dtos.ListItemDto;
 import org.kush.share.api.controller.dtos.UserListDto;
 import org.kush.share.api.database.models.ListItem;
 import org.kush.share.api.database.models.ShareRequest;
+import org.kush.share.api.database.models.ShareRequestStatus;
 import org.kush.share.api.database.models.UserList;
 import org.kush.share.api.database.repository.ItemsRepository;
 import org.kush.share.api.database.repository.ListRepository;
 import org.kush.share.api.database.repository.ShareRequestRepository;
 import org.kush.share.api.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -148,5 +150,25 @@ public class ListService
         return lists.stream().filter(list -> list.getListName().equalsIgnoreCase(listName))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("list not found!"));
+    }
+
+    @Transactional
+    public String shareUserList(String userId, String requestId)
+    {
+        ShareRequest request = shareRequestRepository.findById(UUID.fromString(requestId))
+                .orElseThrow(() -> new IllegalArgumentException("Request not found, it could be expired or used!"));
+
+        UserList listToShare = request.getSharedList();
+
+        if (listToShare.getCreatedBy().equals(UUID.fromString(userId)))
+        {
+            throw new IllegalArgumentException("Cannot share a list created by yourself");
+        }
+        listToShare.getSharedWith().add(request.getShareId());
+        listRepository.save(listToShare);
+
+        request.setRequestStatus(ShareRequestStatus.USED);
+        shareRequestRepository.save(request);
+        return listToShare.getListName();
     }
 }

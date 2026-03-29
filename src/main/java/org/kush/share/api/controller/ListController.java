@@ -62,4 +62,11 @@ public class ListController
         return ResponseEntity.status(HttpStatus.OK)
                 .body(listService.createShareListLink((String) authentication.getPrincipal(), listName));
     }
+
+    @GetMapping("share/request/{requestId}")
+    public ResponseEntity<String> shareUserList(Authentication authentication, @PathVariable("requestId") String requestId)
+    {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(listService.shareUserList((String) authentication.getPrincipal(), requestId) + " shared with user");
+    }
 }
