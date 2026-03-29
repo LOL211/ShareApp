@@ -164,7 +164,7 @@ public class ListService
         {
             throw new IllegalArgumentException("Cannot share a list created by yourself");
         }
-        listToShare.getSharedWith().add(request.getShareId());
+        listToShare.getSharedWith().add(UUID.fromString(userId));
         listRepository.save(listToShare);
 
         request.setRequestStatus(ShareRequestStatus.USED);
