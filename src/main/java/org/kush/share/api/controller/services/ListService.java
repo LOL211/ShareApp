@@ -20,6 +20,7 @@ import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -127,7 +128,13 @@ public class ListService
 
         if (!matchedList.getCreatedBy().equals(UUID.fromString(userId)))
         {
-            throw new IllegalArgumentException("Cannot delete a list shared by someone else!");
+            Set<UUID> sharedWith = matchedList.getSharedWith();
+            if (sharedWith != null)
+            {
+                sharedWith.remove(UUID.fromString(userId));
+            }
+            listRepository.save(matchedList);
+            return;
         }
 
         listRepository.delete(matchedList);
