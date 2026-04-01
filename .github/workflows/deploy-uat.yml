@@ -58,8 +58,9 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.UAT_SSH_KEY }}" > ~/.ssh/uat_key
           chmod 600 ~/.ssh/uat_key
-          ssh-keyscan -H togoauth.kbanbah.com >> ~/.ssh/known_hosts
 
       - name: Run Ansible Playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           ansible-playbook -i ansible/inventory/uat ansible/deploy.yml
