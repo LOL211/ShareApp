@@ -125,19 +125,22 @@ public class ListService
 
     public void deleteList(String userId, String listName) {
         UserList matchedList = getMatchedList(userId, listName);
+        UUID userUuid = UUID.fromString(userId);
 
-        if (!matchedList.getCreatedBy().equals(UUID.fromString(userId)))
+        if (matchedList.getCreatedBy().equals(userUuid))
         {
-            Set<UUID> sharedWith = matchedList.getSharedWith();
-            if (sharedWith != null)
-            {
-                sharedWith.remove(UUID.fromString(userId));
-            }
-            listRepository.save(matchedList);
+            listRepository.delete(matchedList);
             return;
         }
 
-        listRepository.delete(matchedList);
+        Set<UUID> sharedWith = matchedList.getSharedWith();
+        if (sharedWith == null || !sharedWith.contains(userUuid))
+        {
+            throw new IllegalArgumentException("List is not shared with you!");
+        }
+
+        sharedWith.remove(userUuid);
+        listRepository.save(matchedList);
     }
 
     public void deleteListItem(String userId, String listName, String listItem) {
