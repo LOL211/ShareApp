@@ -13,7 +13,7 @@ public interface ShareRequestRepository extends JpaRepository<ShareRequest, UUID
 {
     @Query("select sr.shareId " +
             "from ShareRequest sr " +
-            "where sr.requestStatus = org.kush.share.api.database.models.ShareRequestStatus.USED and " +
+            "where sr.requestStatus = org.kush.share.api.database.models.ShareRequestStatus.USED or " +
             "sr.expiresAt < CURRENT_TIMESTAMP")
     List<UUID> findAllInvalidShareRequests();
 

@@ -1,4 +1,4 @@
-spring.application.name: ShareApi
+spring.application.name: togo
 spring:
   jpa:
     hibernate:
@@ -22,7 +22,7 @@ spring:
             provider: vaulty-auth
         provider:
           vaulty-auth:
-            token-uri: http://togoauth.kbanbah.com:8080/api/token
+            token-uri: https://togoauth.kbanbah.com/auth/api/token
   cloud:
     openfeign:
       oauth2:
@@ -30,9 +30,20 @@ spring:
         clientRegistrationId: auth-client
 
 vaulty:
-  auth.url: http://togoauth.kbanbah.com:8080
+  auth.url: https://togoauth.kbanbah.com/auth
   client.id: ${CLIENT_ID}
   scopes: api.share.app
 
 server:
   port: 8081
+  tomcat:
+    accesslog:
+      enabled: true
+      directory: ${user.home}/logs/togo/tomcat
+      prefix: access_log
+      suffix: .log
+      file-date-format: .yyyy-MM-dd
+      rotate: true
+      rename-on-rotate: false
+      max-days: 10
+      pattern: '%{yyyy-MM-dd HH:mm:ss.SSS}t %a "%m %U%q %H" %s %b %Dms'

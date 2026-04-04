@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.kush.share.api.service.AuthService;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +31,7 @@ public class JwtFilter extends OncePerRequestFilter {
     @SneakyThrows
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
-        try{
+        try {
             String bearerToken = request.getHeader("Authorization").split("Bearer ")[1];
             JwtDecoder publicKey = authService.getJwtDecoder();
             Jwt token = publicKey.decode(bearerToken);
@@ -55,12 +56,16 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
             SecurityContextHolder.getContext().setAuthentication(jwtToken);
+            MDC.put("userId", token.getSubject());
             filterChain.doFilter(request, response);
         }
-        catch (Exception e){
+        catch (Exception e) {
             log.error("Jwt token authentication failed", e);
             SecurityContextHolder.clearContext();
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+        finally {
+            MDC.remove("userId");
         }
     }
 }

@@ -2,3 +2,7 @@ vaulty:
   auth.url: http://localhost:8080
   client.id: "fake_client_id"
   scopes: api.share.app
+server:
+  tomcat:
+    accesslog:
+      enabled: false
