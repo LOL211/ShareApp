@@ -174,6 +174,12 @@ public class ListService
         {
             throw new IllegalArgumentException("Cannot share a list created by yourself");
         }
+
+        if (request.getRequestStatus() == ShareRequestStatus.USED)
+        {
+            throw new IllegalArgumentException("Link is already used!");
+        }
+
         listToShare.getSharedWith().add(UUID.fromString(userId));
         listRepository.save(listToShare);
 
