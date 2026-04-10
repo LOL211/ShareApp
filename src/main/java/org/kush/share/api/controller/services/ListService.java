@@ -46,7 +46,7 @@ public class ListService
         return lists.stream().map(this::convertUserListToDto).toList();
     }
 
-    public UserListDto getSingleList(String userId, String listName)
+    public UserListDto getSingleList(String userId, UUID listId)
     {
         String username = userService.getUsernameForUuid(UUID.fromString(userId));
 
@@ -55,7 +55,7 @@ public class ListService
             return null;
         }
 
-        UserList list = listRepository.findListOfUserWithListName(UUID.fromString(userId), listName).orElseThrow(() -> new IllegalArgumentException("list not found"));
+        UserList list = listRepository.findListOfUserWithListId(UUID.fromString(userId), listId).orElseThrow(() -> new IllegalArgumentException("list not found"));
 
         return convertUserListToDto(list);
     }
@@ -81,11 +81,11 @@ public class ListService
         return userList.getListName();
     }
 
-    public String createListItem(String userId, String listName, ListItemDto listItemDto) {
+    public String createListItem(String userId, UUID listId, ListItemDto listItemDto) {
         List<UserList> lists = listRepository.findAllListsOfAUserWithItems(UUID.fromString(userId));
 
-        UserList list = lists.stream().filter(userList -> userList.getListName()
-                .equalsIgnoreCase(listName))
+        UserList list = lists.stream().filter(userList -> userList.getId()
+                .equals(listId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("List not found!"));
 
@@ -96,9 +96,9 @@ public class ListService
         return listItem.getDescription();
     }
 
-    public String createShareListLink(String userId, String listName) throws Exception
+    public String createShareListLink(String userId, UUID listId) throws Exception
     {
-        UserList list = listRepository.findListOfUserWithListName(UUID.fromString(userId), listName)
+        UserList list = listRepository.findListOfUserWithListId(UUID.fromString(userId), listId)
                 .orElseThrow(() -> new IllegalArgumentException("List not found!"));
 
         if (!list.getCreatedBy().equals(UUID.fromString(userId)))
@@ -118,13 +118,13 @@ public class ListService
 
     private UserListDto convertUserListToDto(UserList userList)
     {
-        return new UserListDto(userList.getListName(),  userService.getUsernameForUuid(userList.getCreatedBy()),
+        return new UserListDto(userList.getId().toString(), userList.getListName(),  userService.getUsernameForUuid(userList.getCreatedBy()),
                 userList.getItems().stream().map(x -> new ListItemDto(x.getLink(), x.getDescription())).toList()
         );
     }
 
-    public void deleteList(String userId, String listName) {
-        UserList matchedList = getMatchedList(userId, listName);
+    public void deleteList(String userId, UUID listId) {
+        UserList matchedList = getMatchedList(userId, listId);
         UUID userUuid = UUID.fromString(userId);
 
         if (matchedList.getCreatedBy().equals(userUuid))
@@ -143,21 +143,22 @@ public class ListService
         listRepository.save(matchedList);
     }
 
-    public void deleteListItem(String userId, String listName, String listItem) {
-        UserList matchedList = getMatchedList(userId, listName);
+    public void deleteListItem(String userId, UUID listId, Long listItemId) {
+        UserList matchedList = getMatchedList(userId, listId);
 
         ListItem itemToDelete = matchedList
                 .getItems().stream()
-                .filter(x -> x.getDescription().equals(listItem))
-                .findFirst().orElseThrow(() -> new IllegalArgumentException("Item "+listItem+" not found in list "+listName));
+                .filter(x -> x.getId().equals(listItemId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Item not found in list "+matchedList.getListName()));
         matchedList.getItems().remove(itemToDelete);
         listRepository.save(matchedList);
     }
 
-    private UserList getMatchedList(String userId, String listName) {
+    private UserList getMatchedList(String userId, UUID listId) {
         List<UserList> lists = listRepository.findAllListsOfAUser(UUID.fromString(userId));
 
-        return lists.stream().filter(list -> list.getListName().equalsIgnoreCase(listName))
+        return lists.stream().filter(list -> list.getId().equals(listId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("list not found!"));
     }
