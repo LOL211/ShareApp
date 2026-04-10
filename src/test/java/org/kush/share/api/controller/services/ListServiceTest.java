@@ -13,7 +13,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -40,13 +41,15 @@ class ListServiceTest
         UUID userId = UUID.randomUUID();
         String listName = "myList";
         UserList userList = new UserList();
+        UUID listId = UUID.randomUUID();
+        userList.setId(listId);
         userList.setCreatedBy(userId);
         userList.setListName(listName);
         userList.setSharedWith(new HashSet<>());
 
         when(listRepository.findAllListsOfAUser(userId)).thenReturn(List.of(userList));
 
-        listService.deleteList(userId.toString(), listName);
+        listService.deleteList(userId.toString(), listId);
 
         verify(listRepository).delete(userList);
         verify(listRepository, never()).save(any());
@@ -59,6 +62,8 @@ class ListServiceTest
         UUID sharedUserId = UUID.randomUUID();
         String listName = "sharedList";
         UserList userList = new UserList();
+        UUID listId = UUID.randomUUID();
+        userList.setId(listId);
         userList.setCreatedBy(ownerId);
         userList.setListName(listName);
         Set<UUID> sharedWith = new HashSet<>();
@@ -67,7 +72,7 @@ class ListServiceTest
 
         when(listRepository.findAllListsOfAUser(sharedUserId)).thenReturn(List.of(userList));
 
-        listService.deleteList(sharedUserId.toString(), listName);
+        listService.deleteList(sharedUserId.toString(), listId);
 
         assertFalse(userList.getSharedWith().contains(sharedUserId));
         verify(listRepository).save(userList);
@@ -82,7 +87,7 @@ class ListServiceTest
         when(listRepository.findAllListsOfAUser(userId)).thenReturn(Collections.emptyList());
 
         assertThrows(IllegalArgumentException.class,
-                () -> listService.deleteList(userId.toString(), "nonExistentList"));
+                () -> listService.deleteList(userId.toString(), UUID.randomUUID()));
     }
 
     @Test
@@ -94,12 +99,14 @@ class ListServiceTest
         UserList userList = new UserList();
         userList.setCreatedBy(ownerId);
         userList.setListName(listName);
+        UUID listId = UUID.randomUUID();
+        userList.setId(listId);
         userList.setSharedWith(new HashSet<>());
 
         when(listRepository.findAllListsOfAUser(unrelatedUserId)).thenReturn(List.of(userList));
 
         assertThrows(IllegalArgumentException.class,
-                () -> listService.deleteList(unrelatedUserId.toString(), listName));
+                () -> listService.deleteList(unrelatedUserId.toString(), listId));
 
         verify(listRepository, never()).save(any());
         verify(listRepository, never()).delete(any(UserList.class));
