@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"description, list_id"})
@@ -18,7 +20,7 @@ public class ListItem
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "item_id")
-    protected Long id;
+    protected UUID id;
 
     @Column
     private String link;

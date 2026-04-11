@@ -119,7 +119,7 @@ public class ListService
     private UserListDto convertUserListToDto(UserList userList)
     {
         return new UserListDto(userList.getId().toString(), userList.getListName(),  userService.getUsernameForUuid(userList.getCreatedBy()),
-                userList.getItems().stream().map(x -> new ListItemDto(x.getLink(), x.getDescription())).toList()
+                userList.getItems().stream().map(x -> new ListItemDto(x.getLink(), x.getDescription(), x.getId().toString())).toList()
         );
     }
 
@@ -143,7 +143,7 @@ public class ListService
         listRepository.save(matchedList);
     }
 
-    public void deleteListItem(String userId, UUID listId, Long listItemId) {
+    public void deleteListItem(String userId, UUID listId, UUID listItemId) {
         UserList matchedList = getMatchedList(userId, listId);
 
         ListItem itemToDelete = matchedList

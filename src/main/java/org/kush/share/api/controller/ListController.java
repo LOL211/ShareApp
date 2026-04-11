@@ -53,11 +53,12 @@ public class ListController
     @DeleteMapping("{listId}/{listItemId}")
     public ResponseEntity<String> deleteListItem(Authentication authentication,
                                                  @PathVariable("listId") String listId,
-                                                 @PathVariable("listItemId") Long listItemId)
+                                                 @PathVariable("listItemId") String listItemId)
     {
         UUID uListId = convertStringToUuid(listId);
-        listService.deleteListItem((String)authentication.getPrincipal(), uListId, listItemId);
-        return ResponseEntity.status(HttpStatus.OK).body("List "+uListId+"'s item "+listItemId+" deleted");
+        UUID uListItemId = convertStringToUuid(listItemId);
+        listService.deleteListItem((String)authentication.getPrincipal(), uListId, uListItemId);
+        return ResponseEntity.status(HttpStatus.OK).body("List "+uListId+"'s item "+uListItemId+" deleted");
     }
 
     @GetMapping("share/{listId}")

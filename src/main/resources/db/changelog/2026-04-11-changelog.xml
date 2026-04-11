@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <!-- Step 1: Add a new UUID column with auto-generated values for all existing rows -->
+    <changeSet id="2026-04-11-1" author="kbanb">
+        <addColumn tableName="list_item">
+            <column name="item_uuid" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <!-- Step 2: Populate any existing rows that did not receive a UUID (safety net) -->
+    <changeSet id="2026-04-11-2" author="kbanb">
+        <update tableName="list_item">
+            <column name="item_uuid" valueComputed="gen_random_uuid()"/>
+            <where>item_uuid IS NULL</where>
+        </update>
+    </changeSet>
+
+    <!-- Step 3: Enforce NOT NULL now that all rows have a UUID -->
+    <changeSet id="2026-04-11-3" author="kbanb">
+        <addNotNullConstraint tableName="list_item" columnName="item_uuid" columnDataType="UUID"/>
+    </changeSet>
+
+    <!-- Step 4: Drop the existing BIGINT primary key constraint -->
+    <changeSet id="2026-04-11-4" author="kbanb">
+        <dropPrimaryKey tableName="list_item" constraintName="pk_listitem"/>
+    </changeSet>
+
+    <!-- Step 5: Promote item_uuid to the new primary key -->
+    <changeSet id="2026-04-11-5" author="kbanb">
+        <addPrimaryKey tableName="list_item" columnNames="item_uuid" constraintName="pk_listitem"/>
+    </changeSet>
+
+    <!-- Step 6: Drop the old BIGINT item_id column -->
+    <changeSet id="2026-04-11-6" author="kbanb">
+        <dropColumn tableName="list_item" columnName="item_id"/>
+    </changeSet>
+
+    <!-- Step 7: Drop the sequence that backed the old BIGINT PK -->
+    <changeSet id="2026-04-11-7" author="kbanb">
+        <dropSequence sequenceName="list_item_seq"/>
+    </changeSet>
+
+    <!-- Step 8: Rename item_uuid to item_id to match the entity mapping -->
+    <changeSet id="2026-04-11-8" author="kbanb">
+        <renameColumn tableName="list_item"
+                      oldColumnName="item_uuid"
+                      newColumnName="item_id"
+                      columnDataType="UUID"/>
+    </changeSet>
+
+</databaseChangeLog>
+
