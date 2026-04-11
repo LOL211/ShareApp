@@ -82,17 +82,10 @@ public class ListService
     }
 
     public String createListItem(String userId, UUID listId, ListItemDto listItemDto) {
-        List<UserList> lists = listRepository.findAllListsOfAUserWithItems(UUID.fromString(userId));
-
-        UserList list = lists.stream().filter(userList -> userList.getId()
-                .equals(listId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("List not found!"));
+        UserList list = getMatchedList(userId, listId);
 
         ListItem listItem = new ListItem(null, listItemDto.link(), listItemDto.description(), list);
-
         itemsRepository.save(listItem);
-
         return listItem.getDescription();
     }
 
@@ -156,11 +149,8 @@ public class ListService
     }
 
     private UserList getMatchedList(String userId, UUID listId) {
-        List<UserList> lists = listRepository.findAllListsOfAUser(UUID.fromString(userId));
-
-        return lists.stream().filter(list -> list.getId().equals(listId))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("list not found!"));
+        return listRepository.findListOfAUserWithId(UUID.fromString(userId), listId)
+                .orElseThrow(() -> new IllegalArgumentException("List not found!"));
     }
 
     @Transactional

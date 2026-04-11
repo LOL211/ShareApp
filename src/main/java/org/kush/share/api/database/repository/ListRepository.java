@@ -24,6 +24,11 @@ public interface ListRepository extends JpaRepository<UserList, String>
     List<UserList> findAllListsOfAUser(@Param("user") UUID user);
 
     @Query("select ul from UserList ul " +
+            "where (:user member of ul.sharedWith or ul.createdBy = :user) " +
+            "and ul.id = :listId")
+    Optional<UserList> findListOfAUserWithId(@Param("user")  UUID user, @Param("listId") UUID listId);
+
+    @Query("select ul from UserList ul " +
             "left join fetch ul.items " +
             "where (:user member of ul.sharedWith or ul.createdBy = :user) " +
             "and ul.id = :listId")
