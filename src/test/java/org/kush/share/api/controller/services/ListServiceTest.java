@@ -47,7 +47,7 @@ class ListServiceTest
         userList.setListName(listName);
         userList.setSharedWith(new HashSet<>());
 
-        when(listRepository.findAllListsOfAUser(userId)).thenReturn(List.of(userList));
+        when(listRepository.findListOfAUserWithId(userId, listId)).thenReturn(Optional.of(userList));
 
         listService.deleteList(userId.toString(), listId);
 
@@ -70,7 +70,7 @@ class ListServiceTest
         sharedWith.add(sharedUserId);
         userList.setSharedWith(sharedWith);
 
-        when(listRepository.findAllListsOfAUser(sharedUserId)).thenReturn(List.of(userList));
+        when(listRepository.findListOfAUserWithId(sharedUserId, listId)).thenReturn(Optional.of(userList));
 
         listService.deleteList(sharedUserId.toString(), listId);
 
@@ -83,8 +83,6 @@ class ListServiceTest
     void deleteList_whenListNotFound_throwsIllegalArgumentException()
     {
         UUID userId = UUID.randomUUID();
-
-        when(listRepository.findAllListsOfAUser(userId)).thenReturn(Collections.emptyList());
 
         assertThrows(IllegalArgumentException.class,
                 () -> listService.deleteList(userId.toString(), UUID.randomUUID()));
@@ -103,7 +101,7 @@ class ListServiceTest
         userList.setId(listId);
         userList.setSharedWith(new HashSet<>());
 
-        when(listRepository.findAllListsOfAUser(unrelatedUserId)).thenReturn(List.of(userList));
+        when(listRepository.findListOfAUserWithId(unrelatedUserId, listId)).thenReturn(Optional.of(userList));
 
         assertThrows(IllegalArgumentException.class,
                 () -> listService.deleteList(unrelatedUserId.toString(), listId));
