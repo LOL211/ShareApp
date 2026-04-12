@@ -10,9 +10,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/list")
+@RequestMapping("/api/v1/list")
 @RequiredArgsConstructor
 public class ListController
 {
@@ -24,10 +25,11 @@ public class ListController
         return ResponseEntity.ok(listService.getList((String) authentication.getPrincipal()));
     }
 
-    @GetMapping("{listName}")
-    public ResponseEntity<UserListDto> getUserList(Authentication authentication, @PathVariable("listName") String listName)
+    @GetMapping("{listId}")
+    public ResponseEntity<UserListDto> getUserList(Authentication authentication, @PathVariable("listId") String listId)
     {
-        return ResponseEntity.ok(listService.getSingleList((String) authentication.getPrincipal(), listName));
+
+        return ResponseEntity.ok(listService.getSingleList((String) authentication.getPrincipal(), convertStringToUuid(listId)));
     }
 
     @PostMapping
@@ -35,32 +37,35 @@ public class ListController
         return ResponseEntity.status(HttpStatus.CREATED).body("Created list "+ listService.createUserList((String) authentication.getPrincipal(), userListDto));
     }
 
-    @PostMapping("{listName}")
-    public ResponseEntity<String> createNewListItem(Authentication authentication, @PathVariable("listName") String listName, @RequestBody ListItemDto listItemDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body("Created item with desc "+ listService.createListItem((String) authentication.getPrincipal(), listName, listItemDto));
+    @PostMapping("{listId}")
+    public ResponseEntity<String> createNewListItem(Authentication authentication, @PathVariable("listId") String listId, @RequestBody ListItemDto listItemDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body("Created item with desc "+ listService.createListItem((String) authentication.getPrincipal(), convertStringToUuid(listId), listItemDto));
     }
 
-    @DeleteMapping("{listName}")
-    public ResponseEntity<String> deleteList(Authentication authentication, @PathVariable("listName") String listName)
+    @DeleteMapping("{listId}")
+    public ResponseEntity<String> deleteList(Authentication authentication, @PathVariable("listId") String listId)
     {
-        listService.deleteList((String)authentication.getPrincipal(), listName);
-        return ResponseEntity.status(HttpStatus.OK).body("List "+listName+" deleted");
+        UUID uListId = convertStringToUuid(listId);
+        listService.deleteList((String)authentication.getPrincipal(), uListId);
+        return ResponseEntity.status(HttpStatus.OK).body("List "+uListId+" deleted");
     }
 
-    @DeleteMapping("{listName}/{listItem}")
+    @DeleteMapping("{listId}/{listItemId}")
     public ResponseEntity<String> deleteListItem(Authentication authentication,
-                                                 @PathVariable("listName") String listName,
-                                                 @PathVariable("listItem") String listItem)
+                                                 @PathVariable("listId") String listId,
+                                                 @PathVariable("listItemId") String listItemId)
     {
-        listService.deleteListItem((String)authentication.getPrincipal(), listName, listItem);
-        return ResponseEntity.status(HttpStatus.OK).body("List "+listName+"'s item "+listItem+" deleted");
+        UUID uListId = convertStringToUuid(listId);
+        UUID uListItemId = convertStringToUuid(listItemId);
+        listService.deleteListItem((String)authentication.getPrincipal(), uListId, uListItemId);
+        return ResponseEntity.status(HttpStatus.OK).body("List "+uListId+"'s item "+uListItemId+" deleted");
     }
 
-    @GetMapping("share/{listName}")
-    public ResponseEntity<String> createShareLinkForList(Authentication authentication, @PathVariable("listName") String listName) throws Exception
+    @GetMapping("share/{listId}")
+    public ResponseEntity<String> createShareLinkForList(Authentication authentication, @PathVariable("listId") String listId) throws Exception
     {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(listService.createShareListLink((String) authentication.getPrincipal(), listName));
+                .body(listService.createShareListLink((String) authentication.getPrincipal(), convertStringToUuid(listId)));
     }
 
     @GetMapping("share/request/{requestId}")
@@ -68,5 +73,17 @@ public class ListController
     {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(listService.shareUserList((String) authentication.getPrincipal(), requestId) + " shared with user");
+    }
+
+    private UUID convertStringToUuid(String listId)
+    {
+        try
+        {
+            return UUID.fromString(listId);
+        }
+        catch (Exception e)
+        {
+            throw new IllegalArgumentException("Send a valid id!");
+        }
     }
 }
